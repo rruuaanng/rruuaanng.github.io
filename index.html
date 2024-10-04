@@ -38,12 +38,46 @@ line-height: 1.6;
 <ul>
 
 <li class="panel">
-<div class="title">pymalloc</div>
-<div class="time">2024/10/3</div>
-<div class="author">ruang</div>
+<div class="title">HELLO</div>
+<div class="time">1981/1/1</div>
+<div class="author">XXX</div>
 <div class="content">
 <h1>pymalloc</h1>
-<h3>implement</h3>
+<p>The default memory allocation strategy in CPython (which also includes mimalloc) is designed to allocate small objects (under 512 bytes) more efficiently by preallocating a certain number of memory blocks, thereby reducing the frequency of allocation requests. Additionally, it is optimized for multi-threaded environments, primarily through the use of the Global Interpreter Lock (GIL). The specific implementation can be found in the source code directory<code>Object/obmalloc.c</code>.</p>
+<h2>Implementation</h2>
+<h3>Principle</h3>
+<h3>Allocation process</h3>
+<h3>pool_header structure</h3>
+<p>```C
+/<em> When you say memory, my mind reasons in terms of (pointers to) blocks </em>/
+typedef uint8_t pymem_block;</p>
+<p>/<em> Pool for small blocks. </em>/
+struct pool_header {
+    union { pymem_block <em>_padding;
+            uint count; } ref;          /</em> number of allocated blocks    <em>/
+    pymem_block </em>freeblock;             /<em> pool's free list head         </em>/
+    struct pool_header <em>nextpool;       /</em> next pool of this size class  <em>/
+    struct pool_header </em>prevpool;       /<em> previous pool       ""        </em>/
+    uint arenaindex;                    /<em> index into arenas of base adr </em>/
+    uint szidx;                         /<em> block size class index        </em>/
+    uint nextoffset;                    /<em> bytes to virgin block         </em>/
+    uint maxnextoffset;                 /<em> largest valid nextoffset      </em>/
+};
+```</p>
+<h3>Public API</h3>
+<ul>
+<li>void *PyMem_Malloc(size_t size)</li>
+<li>void *PyMem_Calloc(size_t nelem, size_t elsize)</li>
+<li>void <em>PyMem_Realloc(void </em>ptr, size_t new_size)</li>
+<li>void PyMem_Free(void *ptr)</li>
+</ul>
+<h3>Private API</h3>
+<ul>
+<li>void<em> _PyObject_Malloc(void </em>ctx, size_t size)</li>
+<li>void<em> _PyObject_Calloc(void </em>ctx, size_t nelem, size_t elsize)</li>
+<li>void<em> _PyObject_Realloc(void </em>ctx, void *ptr, size_t size)</li>
+<li>void _PyObject_Free(void <em>ctx, void </em>p)</li>
+</ul>
 </div>
 </li>
 

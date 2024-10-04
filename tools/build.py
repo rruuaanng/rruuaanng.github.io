@@ -5,8 +5,10 @@ from markdown import markdown
 
 
 # notes dir
-notedir = '../notes'
+notedir = f'{os.getcwd()}\\notes'
 
+# index path
+index_path = f'{os.getcwd()}\\index.html'
 # note file list
 notes = [f'{notedir}/{note}'
          for note in os.listdir(notedir)]
@@ -102,7 +104,7 @@ def main():
             except Exception:
                 os._exit(1)
     else:
-        with open('../index.html', 'w') as fp:
+        with open(index_path, 'w') as fp:
             fp.write(render_index(news_list))
 
 if __name__ == '__main__':
