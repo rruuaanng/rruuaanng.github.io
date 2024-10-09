@@ -1,3 +1,9 @@
+---
+title: "pymalloc"
+time: "2024/9/26"
+author: "RUANG"
+---
+
 # pymalloc
 
 The default memory allocation strategy in CPython (which also includes mimalloc) is designed to allocate small objects (under 512 bytes) more efficiently by preallocating a certain number of memory blocks, thereby reducing the frequency of allocation requests. Additionally, it is optimized for multi-threaded environments, primarily through the use of the Global Interpreter Lock (GIL). The specific implementation can be found in the source code directory`Object/obmalloc.c`.
